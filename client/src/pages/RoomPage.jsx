@@ -209,15 +209,15 @@ export default function RoomPage() {
   }
 
   function handleShare() {
-    const link = window.location.href;
+    const link = state.roomId || roomId;
 
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(link).then(() => {
-        setShareMessage("Board link copied");
+        setShareMessage("Room ID copied");
       });
     } else {
-      window.prompt("Copy this board link:", link);
-      setShareMessage("Board link ready");
+      window.prompt("Copy this Room ID:", link);
+      setShareMessage("Room ID ready");
     }
 
     window.setTimeout(() => setShareMessage(""), 1800);
@@ -272,7 +272,7 @@ export default function RoomPage() {
           {formatLastSaved(state.savedAt)}
         </span>
         <button type="button" className="cta-button" onClick={handleShare}>
-          Share board
+          Share Room ID
         </button>
       </section>
 
@@ -286,7 +286,7 @@ export default function RoomPage() {
           <span className="presence-meta">{state.participants.length || 1} online</span>
         </div>
         <button type="button" className="cta-button" onClick={handleShare}>
-          {shareMessage || "Share board"}
+          {shareMessage || "Share Room ID"}
         </button>
       </section>
 

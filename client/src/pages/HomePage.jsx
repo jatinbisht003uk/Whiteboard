@@ -22,6 +22,7 @@ export default function HomePage() {
   const [name, setName] = useState(window.localStorage.getItem("pulseboard-name") || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showJoinInput, setShowJoinInput] = useState(false);
 
   function persistIdentity(nextName) {
     const trimmedName = nextName.trim() || "Guest";
@@ -83,20 +84,36 @@ export default function HomePage() {
             maxLength={32}
           />
 
-          <label htmlFor="room-id">Room ID</label>
-          <input
-            id="room-id"
-            value={roomId}
-            onChange={(event) => setRoomId(event.target.value.toUpperCase())}
-            placeholder="A1B2C3D4"
-            maxLength={16}
-          />
+          {showJoinInput && (
+            <>
+              <label htmlFor="room-id">Room ID</label>
+              <input
+                id="room-id"
+                value={roomId}
+                onChange={(event) => setRoomId(event.target.value.toUpperCase())}
+                placeholder="A1B2C3D4"
+                maxLength={16}
+                autoFocus
+              />
+            </>
+          )}
 
           <div className="hero-actions">
-            <button type="submit">Join Room</button>
-            <button type="button" className="secondary-button" onClick={handleCreateRoom} disabled={loading}>
-              {loading ? "Creating..." : "Create Room"}
-            </button>
+            {!showJoinInput ? (
+              <>
+                <button type="button" onClick={() => setShowJoinInput(true)}>Join Room</button>
+                <button type="button" className="secondary-button" onClick={handleCreateRoom} disabled={loading}>
+                  {loading ? "Creating..." : "Create Room"}
+                </button>
+              </>
+            ) : (
+              <>
+                <button type="submit">Confirm Join</button>
+                <button type="button" className="secondary-button" onClick={() => { setShowJoinInput(false); setError(""); }} disabled={loading}>
+                  Cancel
+                </button>
+              </>
+            )}
           </div>
 
           {error ? <p className="form-error">{error}</p> : null}
